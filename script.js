@@ -1,6 +1,7 @@
 import { returnsArrays } from "./src/calculosInvestimentos";
 
 const calculateButton = document.getElementById("calculate-results");
+const clearButton = document.getElementById("clear-form");
 const form = document.getElementById("investment-form");
 
 function renderProgression(event) {
@@ -34,6 +35,20 @@ function renderProgression(event) {
   );
 
   console.log(returnArray);
+}
+
+function clearForm() {
+  form["starting-amount"].value = "";
+  form["addiotional-contribution"].value = "";
+  form["time-amount"].value = "";
+  form["return-rate"].value = "";
+  form["tax-rate"].value = "";
+
+  const errorInputs =document.querySelectorAll('.error')
+  for (const error of errorInputs ) {
+    error.classList.remove('error')
+    error.parentElement.querySelector('p').remove()
+  }
 }
 
 function validateInput(event) {
@@ -70,3 +85,4 @@ for (const formElement of form) {
 }
 
 calculateButton.addEventListener("click", renderProgression);
+clearButton.addEventListener("click", clearForm);
