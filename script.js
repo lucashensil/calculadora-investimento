@@ -2,14 +2,14 @@ import { returnsArrays } from "./src/calculosInvestimentos";
 import { Chart } from "chart.js/auto";
 
 const finalMoneyChart = document.getElementById("final-money-distribution");
-const progressionChart = document.getElementById("progression-chart");
+const progressionChart = document.getElementById("progression");
 
 const calculateButton = document.getElementById("calculate-results");
 const clearButton = document.getElementById("clear-form");
 const form = document.getElementById("investment-form");
 
 function formatCurrency(value) {
-  return value.toFixed(2)
+  return value.toFixed(2);
 }
 
 function renderProgression(event) {
@@ -52,8 +52,12 @@ function renderProgression(event) {
         {
           data: [
             formatCurrency(finalInvestment.investedAmount),
-            formatCurrency(finalInvestment.totalInterestReturns * (1 - taxRate / 100)),
-            formatCurrency(finalInvestment.totalInterestReturns * (taxRate / 100)),
+            formatCurrency(
+              finalInvestment.totalInterestReturns * (1 - taxRate / 100)
+            ),
+            formatCurrency(
+              finalInvestment.totalInterestReturns * (taxRate / 100)
+            ),
           ],
           backgroundColor: [
             "rgb(255, 99, 132)",
@@ -63,6 +67,37 @@ function renderProgression(event) {
           hoverOffset: 4,
         },
       ],
+    },
+  });
+
+  new Chart(progressionChart, {
+    type: "bar",
+    data: {
+      labels: returnArray.map(investmentObject => formatCurrency(investmentObject.month)),
+      datasets: [
+        {
+          label: "Total investido",
+          data: returnArray.map(
+            (investmentObject) => formatCurrency(investmentObject.investedAmount)
+          ),
+          backgroundColor: "#f56",
+        },
+        {
+          label: "Retorno do Investimento",
+          data: returnArray.map(
+            (investmentObject) => investmentObject.interestReturns
+          ),
+          backgroundColor: "#f90",
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top",
+        }
+      },
     },
   });
 }
