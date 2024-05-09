@@ -2,7 +2,10 @@ import { returnsArrays } from "./src/calculosInvestimentos";
 import { Chart } from "chart.js/auto";
 
 const finalMoneyChart = document.getElementById("final-money-distribution");
+let resultsChartReference = {}
+
 const progressionChart = document.getElementById("progression");
+let progressionChartReference = {}
 
 const calculateButton = document.getElementById("calculate-results");
 const clearButton = document.getElementById("clear-form");
@@ -17,6 +20,9 @@ function renderProgression(event) {
   if (document.querySelector(".error")) {
     return;
   }
+
+resetCharts()
+
   const startingAmount = Number(
     document.getElementById("starting-amount").value.replace(",", ".")
   );
@@ -43,8 +49,7 @@ function renderProgression(event) {
   );
 
   const finalInvestment = returnArray[returnArray.length - 1];
-
-  new Chart(finalMoneyChart, {
+  resultsChartReference = new Chart(finalMoneyChart, {
     type: "doughnut",
     data: {
       labels: ["Total Investido", "Rendimento", "Imposto"],
@@ -70,15 +75,17 @@ function renderProgression(event) {
     },
   });
 
-  new Chart(progressionChart, {
+  progressionChartReference = new Chart(progressionChart, {
     type: "bar",
     data: {
-      labels: returnArray.map(investmentObject => formatCurrency(investmentObject.month)),
+      labels: returnArray.map((investmentObject) =>
+        formatCurrency(investmentObject.month)
+      ),
       datasets: [
         {
           label: "Total investido",
-          data: returnArray.map(
-            (investmentObject) => formatCurrency(investmentObject.investedAmount)
+          data: returnArray.map((investmentObject) =>
+            formatCurrency(investmentObject.investedAmount)
           ),
           backgroundColor: "#f56",
         },
@@ -96,10 +103,22 @@ function renderProgression(event) {
       plugins: {
         legend: {
           position: "top",
-        }
+        },
       },
     },
   });
+}
+
+function isObjectEmpety(obj) {
+  return Object.keys(obj).length === 0
+}
+
+function resetCharts() {
+  if(!isObjectEmpety(progressionChartReference) && !isObjectEmpety(resultsChartReference)) {
+    progressionChartReference.destroy()
+    resultsChartReference.destroy()
+
+  }
 }
 
 function clearForm() {
@@ -108,11 +127,14 @@ function clearForm() {
   form["time-amount"].value = "";
   form["return-rate"].value = "";
   form["tax-rate"].value = "";
-
+  resetCharts()
+  
   const errorInputs = document.querySelectorAll(".error");
   for (const error of errorInputs) {
     error.classList.remove("error");
     error.parentElement.querySelector("p").remove();
+
+  
   }
 }
 
