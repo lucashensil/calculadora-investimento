@@ -1,8 +1,16 @@
 import { returnsArrays } from "./src/calculosInvestimentos";
+import { Chart } from "chart.js/auto";
+
+const finalMoneyChart = document.getElementById("final-money-distribution");
+const progressionChart = document.getElementById("progression-chart");
 
 const calculateButton = document.getElementById("calculate-results");
 const clearButton = document.getElementById("clear-form");
 const form = document.getElementById("investment-form");
+
+function formatCurrency(value) {
+  return value.toFixed(2)
+}
 
 function renderProgression(event) {
   event.preventDefault();
@@ -34,7 +42,29 @@ function renderProgression(event) {
     returnRatePeriod
   );
 
-  console.log(returnArray);
+  const finalInvestment = returnArray[returnArray.length - 1];
+
+  new Chart(finalMoneyChart, {
+    type: "doughnut",
+    data: {
+      labels: ["Total Investido", "Rendimento", "Imposto"],
+      datasets: [
+        {
+          data: [
+            formatCurrency(finalInvestment.investedAmount),
+            formatCurrency(finalInvestment.totalInterestReturns * (1 - taxRate / 100)),
+            formatCurrency(finalInvestment.totalInterestReturns * (taxRate / 100)),
+          ],
+          backgroundColor: [
+            "rgb(255, 99, 132)",
+            "rgb(255, 99, 12)",
+            "rgb(25, 9, 132)",
+          ],
+          hoverOffset: 4,
+        },
+      ],
+    },
+  });
 }
 
 function clearForm() {
@@ -44,10 +74,10 @@ function clearForm() {
   form["return-rate"].value = "";
   form["tax-rate"].value = "";
 
-  const errorInputs =document.querySelectorAll('.error')
-  for (const error of errorInputs ) {
-    error.classList.remove('error')
-    error.parentElement.querySelector('p').remove()
+  const errorInputs = document.querySelectorAll(".error");
+  for (const error of errorInputs) {
+    error.classList.remove("error");
+    error.parentElement.querySelector("p").remove();
   }
 }
 
