@@ -12,7 +12,7 @@
     >
       <h1 class="text-2xl font-bold px-6 py-2">Calculadora de Investimentos</h1>
       <form id="investment-form" class="w-full">
-        <div class="flex w-full  flex-col px-6 my-2 h-[4.25rem]">
+        <div class="flex w-full flex-col px-6 my-2 h-[4.25rem]">
           <label for="starting-amount" class="text-gray-700 font-bold"
             >Investimento Inicial</label
           >
@@ -32,7 +32,6 @@
               placeholder="0.00"
             />
           </div>
-          
         </div>
 
         <div class="flex w-full flex-col px-6 my-2 h-[4.25rem]">
@@ -137,11 +136,13 @@
         >
           Calcular
         </button>
-        <button id="clear-form" class="w-1/2 rounded-lg hover:bg-emerald-500">Limpar</button>
+        <button id="clear-form" class="w-1/2 rounded-lg hover:bg-emerald-500">
+          Limpar
+        </button>
       </div>
     </aside>
     <main class="row-span-2 col-span-2">
-      <section id="charts-container h-full">
+      <!-- <section id="charts-container h-full">
         <div class="h-[36dvh] flex flex-col items-center pb-10">
           <p class="font-bold text-lg">Resultado Final</p>
           <canvas id="final-money-distribution"></canvas>
@@ -152,6 +153,13 @@
 
           </canvas>
         </div>
+      </section> -->
+      <section id="table-container" class="h-full">
+        <p class="font-bold text-lg text-center">Resultados Mensais</p>
+        <table
+          id="results-table"
+          class="w-full max-h-full border border-separate"
+        ></table>
       </section>
     </main>
 

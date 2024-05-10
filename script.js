@@ -1,18 +1,43 @@
 import { returnsArrays } from "./src/calculosInvestimentos";
+import { createTable } from "./src/table";
 import { Chart } from "chart.js/auto";
 
 const finalMoneyChart = document.getElementById("final-money-distribution");
-let resultsChartReference = {}
+let resultsChartReference = {};
 
 const progressionChart = document.getElementById("progression");
-let progressionChartReference = {}
+let progressionChartReference = {};
 
 const calculateButton = document.getElementById("calculate-results");
 const clearButton = document.getElementById("clear-form");
 const form = document.getElementById("investment-form");
 
+const columnsArray = [
+  {
+    columnLabel: "Total Investido",
+    accessor: "investedAmount",
+    format: (info) => formatCurrency(info),
+  },
+  {
+    columnLabel: "Rendimento Mensal",
+    accessor: "interestReturns",
+    format: (info) => formatCurrency(info),
+  },
+  {
+    columnLabel: "Rendimento Total",
+    accessor: "totalInterestReturns",
+    format: (info) => formatCurrency(info),
+  },
+  { columnLabel: "Mês", accessor: "month" },
+  {
+    columnLabel: "Quantia Total",
+    accessor: "totalAmount",
+    format: (info) => formatCurrency(info),
+  },
+];
+
 function formatCurrency(value) {
-  return value.toFixed(2);
+  return value.toLocaleString("pt-br", { style: "currency", currency: "BRL" });
 }
 
 function renderProgression(event) {
@@ -21,7 +46,7 @@ function renderProgression(event) {
     return;
   }
 
-resetCharts()
+  // resetCharts();
 
   const startingAmount = Number(
     document.getElementById("starting-amount").value.replace(",", ".")
@@ -48,77 +73,81 @@ resetCharts()
     returnRatePeriod
   );
 
-  const finalInvestment = returnArray[returnArray.length - 1];
-  resultsChartReference = new Chart(finalMoneyChart, {
-    type: "doughnut",
-    data: {
-      labels: ["Total Investido", "Rendimento", "Imposto"],
-      datasets: [
-        {
-          data: [
-            formatCurrency(finalInvestment.investedAmount),
-            formatCurrency(
-              finalInvestment.totalInterestReturns * (1 - taxRate / 100)
-            ),
-            formatCurrency(
-              finalInvestment.totalInterestReturns * (taxRate / 100)
-            ),
-          ],
-          backgroundColor: [
-            "rgb(255, 99, 132)",
-            "rgb(255, 99, 12)",
-            "rgb(25, 9, 132)",
-          ],
-          hoverOffset: 4,
-        },
-      ],
-    },
-  });
+  //   const finalInvestment = returnArray[returnArray.length - 1];
+  //   resultsChartReference = new Chart(finalMoneyChart, {
+  //     type: "doughnut",
+  //     data: {
+  //       labels: ["Total Investido", "Rendimento", "Imposto"],
+  //       datasets: [
+  //         {
+  //           data: [
+  //             formatCurrency(finalInvestment.investedAmount),
+  //             formatCurrency(
+  //               finalInvestment.totalInterestReturns * (1 - taxRate / 100)
+  //             ),
+  //             formatCurrency(
+  //               finalInvestment.totalInterestReturns * (taxRate / 100)
+  //             ),
+  //           ],
+  //           backgroundColor: [
+  //             "rgb(255, 99, 132)",
+  //             "rgb(255, 99, 12)",
+  //             "rgb(25, 9, 132)",
+  //           ],
+  //           hoverOffset: 4,
+  //         },
+  //       ],
+  //     },
+  //   });
 
-  progressionChartReference = new Chart(progressionChart, {
-    type: "bar",
-    data: {
-      labels: returnArray.map((investmentObject) =>
-        formatCurrency(investmentObject.month)
-      ),
-      datasets: [
-        {
-          label: "Total investido",
-          data: returnArray.map((investmentObject) =>
-            formatCurrency(investmentObject.investedAmount)
-          ),
-          backgroundColor: "#f56",
-        },
-        {
-          label: "Retorno do Investimento",
-          data: returnArray.map(
-            (investmentObject) => investmentObject.interestReturns
-          ),
-          backgroundColor: "#f90",
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: "top",
-        },
-      },
-    },
-  });
-}
+  //   progressionChartReference = new Chart(progressionChart, {
+  //     type: "bar",
+  //     data: {
+  //       labels: returnArray.map((investmentObject) =>
+  //         formatCurrency(investmentObject.month)
+  //       ),
+  //       datasets: [
+  //         {
+  //           label: "Total investido",
+  //           data: returnArray.map((investmentObject) =>
+  //             formatCurrency(investmentObject.investedAmount)
+  //           ),
+  //           backgroundColor: "#f56",
+  //         },
+  //         {
+  //           label: "Retorno do Investimento",
+  //           data: returnArray.map(
+  //             (investmentObject) => investmentObject.interestReturns
+  //           ),
+  //           backgroundColor: "#f90",
+  //         },
+  //       ],
+  //     },
+  //     options: {
+  //       responsive: true,
+  //       plugins: {
+  //         legend: {
+  //           position: "top",
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
 
-function isObjectEmpety(obj) {
-  return Object.keys(obj).length === 0
-}
+  createTable(columnsArray, returnArray, "results-table");
 
-function resetCharts() {
-  if(!isObjectEmpety(progressionChartReference) && !isObjectEmpety(resultsChartReference)) {
-    progressionChartReference.destroy()
-    resultsChartReference.destroy()
-
+  function isObjectEmpety(obj) {
+    return Object.keys(obj).length === 0;
   }
+
+  // function resetCharts() {
+  //   if (
+  //     !isObjectEmpety(progressionChartReference) &&
+  //     !isObjectEmpety(resultsChartReference)
+  //   ) {
+  //     progressionChartReference.destroy();
+  //     resultsChartReference.destroy();
+  //   }
 }
 
 function clearForm() {
@@ -127,14 +156,12 @@ function clearForm() {
   form["time-amount"].value = "";
   form["return-rate"].value = "";
   form["tax-rate"].value = "";
-  resetCharts()
-  
+  // resetCharts();
+
   const errorInputs = document.querySelectorAll(".error");
   for (const error of errorInputs) {
     error.classList.remove("error");
     error.parentElement.querySelector("p").remove();
-
-  
   }
 }
 
