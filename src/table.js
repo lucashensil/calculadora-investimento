@@ -31,6 +31,7 @@ function createTeableHeader(tableReference, columnsArray) {
     tableReference.querySelector("thead") ?? createTheadEl(tableReference);
 
   const headerRow = document.createElement("tr");
+  ['bg-blue-900', 'text-slate-200', 'sticky', 'top-0'].forEach(cssClass => headerRow.classList.add(cssClass))
   for (const tableColumnObject of columnsArray) {
     const headerEl = `<th class= 'text-center'> ${tableColumnObject.columnLabel} </th>`;
 
@@ -50,7 +51,9 @@ function createTeableBody(tableReference, tableItemns, columnsArray) {
 
   for (const [itemIndex, tableItem] of tableItemns.entries()) {
     const tableRow = document.createElement("tr");
-
+    if (itemIndex % 2 !==0) {
+      tableRow.classList.add('bg-blue-200')
+    }
     for (const tableColumn of columnsArray) {
       const formatFn = tableColumn.format ?? ((info) => info)
       tableRow.innerHTML += `<td class='text-center'>${
