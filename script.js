@@ -161,6 +161,9 @@ function clearForm() {
   form["tax-rate"].value = "";
   resetCharts();
 
+  const table = document.getElementById('results-table')
+  table.innerHTML = ''
+
   const errorInputs = document.querySelectorAll(".error");
   for (const error of errorInputs) {
     error.classList.remove("error");
