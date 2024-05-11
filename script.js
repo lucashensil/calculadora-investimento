@@ -139,7 +139,6 @@ function renderProgression(event) {
   createTable(columnsArray, returnArray, "results-table");
 }
 
-
 function isObjectEmpety(obj) {
   return Object.keys(obj).length === 0;
 }
@@ -201,6 +200,18 @@ for (const formElement of form) {
     formElement.addEventListener("blur", validateInput);
   }
 }
+
+const mainEl = document.querySelector("main");
+const carouselEl = document.getElementById("carousel");
+const nextBtn = document.getElementById("slide-arrow-next");
+const previousBtn = document.getElementById("slide-arrow-previous");
+
+nextBtn.addEventListener("click", () => {
+  carouselEl.scrollLeft += mainEl.clientWidth;
+});
+previousBtn.addEventListener("click", () => {
+  carouselEl.scrollLeft -= mainEl.clientWidth;
+});
 
 calculateButton.addEventListener("click", renderProgression);
 clearButton.addEventListener("click", clearForm);
