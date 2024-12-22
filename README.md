@@ -1,15 +1,8 @@
-# Calculadora de Investimentos
+# Desafio: Calculadora de Investimento
+**Descrição:** Este desafio consistiu em desenvolver uma página web que simula o crescimento de um investimento com base em dados fornecidos pelo usuário. Os resultados são apresentados de forma clara por meio de gráficos e tabelas interativas. <br>
 
-Este projeto é uma calculadora de investimentos desenvolvido como parte de um desafio do curso de Javascript Impressionador.
+**Tecnologias Usadas:** JavaScript, Node.js, HTML, Tailwind, Vercel <br>
 
-## Tecnologias Utilizadas
+**Origem:** Desafio retirado do curso Javascript Impressionador
 
-- **JavaScript**
-- **HTML**
-- **Tailwind CSS**
-
-## Funcionalidades
-
-- **Cálculo do resultado final do investimento**
-- **Gráfico de progressão do investimento ao longo do tempo**
-- **Tabela de resultados mensais detalhada**
+![demonstrativo](src/demonstracao.mp4)
